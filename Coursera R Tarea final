@@ -1,0 +1,10 @@
+#Código para obtener una página de Wikipedia sobre la pandemia de COVID-19 utilizando una solicitud HTTP
+library(httr)
+url <- "https://en.wikipedia.org/wiki/Template:COVID-19_pandemic_data"
+response <- GET(url)
+#Código para extraer la tabla de datos de pruebas de COVID-19 de la página HTML de Wikipedia
+library(rvest)
+html_content <- content(response, as = "text")
+tables <- html_table(read_html(html_content), fill = TRUE)
+# Selecciona la tabla correspondiente según el índice del cuaderno
+covid_table <- tables[[1]]
