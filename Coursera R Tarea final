@@ -8,3 +8,23 @@ html_content <- content(response, as = "text")
 tables <- html_table(read_html(html_content), fill = TRUE)
 # Selecciona la tabla correspondiente según el índice del cuaderno
 covid_table <- tables[[1]]
+# Limpieza básica (eliminación de columnas vacías o formato de números)
+# Exportar a CSV
+write.csv(covid_table, "covid_data_cleaned.csv", row.names = FALSE)
+# Ejemplo seleccionando columnas clave
+covid_subset <- covid_data[, c("Country", "Total Cases", "Total Deaths", "Total Tests")]
+total_cases <- sum(as.numeric(gsub(",", "", covid_data$`Total Cases`)), na.rm = TRUE)
+total_tests <- sum(as.numeric(gsub(",", "", covid_data$`Total Tests`)), na.rm = TRUE)
+positive_rate <- total_cases / total_tests
+positive_rate
+sorted_countries <- sort(unique(covid_data$Country))
+sorted_countries
+united_countries <- grep("^United", covid_data$Country, value = TRUE)
+united_countries
+selected_rows <- covid_data[covid_data$Country %in% c("USA", "India"), c("Country", "Total Cases", "Total Deaths")]
+selected_rows
+# Suponiendo que existe la columna confirmed_to_population_ratio
+max_country <- covid_data$Country[which.max(covid_data$confirmed_to_population_ratio)]
+print(max_country)
+low_ratio_countries <- covid_data[covid_data$confirmed_to_population_ratio < 0.01, "Country"]
+low_ratio_countries
